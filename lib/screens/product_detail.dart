@@ -42,8 +42,6 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
 
-      
-      
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -57,10 +55,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   width: double.infinity,
                   height: 400,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(widget.productData['image']),
-                      fit: BoxFit.cover,
-                    ),
+                    image: DecorationImage(image: NetworkImage(widget.productData['image']),fit: BoxFit.cover,),
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
@@ -86,14 +81,9 @@ class _ProductDetailState extends State<ProductDetail> {
                     children: [
                       const Icon(Icons.topic_outlined, color: Colors.blue),
                       const SizedBox(width: 5),
-                      Text('Publicación número: ',
-                        style: const TextStyle(color: Colors.blue),
-                      ),
+                      Text('Publicación número: ',style: const TextStyle(color: Colors.blue),),
                       const SizedBox(width: 5),
-                      Text(
-                        widget.productData['id'].toString(),
-                        style: const TextStyle(color: Colors.blue),
-                      ),
+                      Text(widget.productData['id'].toString(),style: const TextStyle(color: Colors.blue),),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -112,18 +102,12 @@ class _ProductDetailState extends State<ProductDetail> {
                         children: [
                           const Padding(
                             padding: EdgeInsets.only(right: 12.0),
-                            child: Text('Estado',
-                                style: TextStyle(fontSize: 10)),
+                            child: Text('Estado', style: TextStyle(fontSize: 10)),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 12.0),
-                            child: Text(
-                              widget.productData['estado'],
-                              style: const TextStyle(
-                                fontSize: 15,
-                                color: Colors.indigo,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            child: Text(widget.productData['estado'],
+                              style: const TextStyle(fontSize: 15,color: Colors.indigo,fontWeight: FontWeight.bold,),
                             ),
                           ),
                         ],
@@ -165,10 +149,7 @@ class _ProductDetailState extends State<ProductDetail> {
               alignment: WrapAlignment.spaceBetween,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                const Text(
-                  'Seleccione si desea realizar un cambio en el estado de la publicación:',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                ),
+                const Text('Seleccione si desea realizar un cambio en el estado de la publicación:',style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
                 _cambiosEstado(context,int.parse(widget.productData['id'].toString()),cambiosEstado,_valueCambiosEstados,),
               ],
             ),
@@ -178,12 +159,7 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  Widget _cambiosEstado(
-    BuildContext context,
-    int idPublicacion,
-    List<Map<String, String>> data,
-    ValueNotifier<String> controlador,
-  ) {
+  Widget _cambiosEstado(BuildContext context, int idPublicacion, List<Map<String, String>> data, ValueNotifier<String> controlador,) {
     return Container(
       height: 30,
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -193,7 +169,7 @@ class _ProductDetailState extends State<ProductDetail> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black54,
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(2, 3),
@@ -209,7 +185,6 @@ class _ProductDetailState extends State<ProductDetail> {
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   controlador.value = newValue;
-
                   context.read<MyPublicationsBloc>().add(
                         ChangeStatusPublications(
                           id: idPublicacion,
@@ -217,14 +192,9 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       );
                   util.message(context, 'Actualizado con éxito', Colors.green);
-                  
                 }
                 Navigator.pop(context);
-                context.read<MyPublicationsBloc>().add(
-                        LoadMyPublicationStatus(
-                          estado: controlador.value,
-                        ),
-                      );
+                context.read<MyPublicationsBloc>().add(LoadMyPublicationStatus(estado: controlador.value,),);
               },
               items: List.generate(data.length, (i) {
                 return DropdownMenuItem<String>(

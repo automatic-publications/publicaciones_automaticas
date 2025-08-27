@@ -32,15 +32,11 @@ int selectedIndex = 0;
     _valueCambiosEstados = ValueNotifier<String>("PENDIENTE");
 
     // Cargar publicaciones de ese estado
-    context.read<MyPublicationsBloc>().add(
-          LoadMyPublicationStatus(estado: _valueCambiosEstados.value),
-        );
+    context.read<MyPublicationsBloc>().add(LoadMyPublicationStatus(estado: _valueCambiosEstados.value),);
 
-    // Cuando cambie el dropdown, recargar automáticamente
+    // Recargar automáticamente estado
     _valueCambiosEstados.addListener(() {
-      context.read<MyPublicationsBloc>().add(
-            LoadMyPublicationStatus(estado: _valueCambiosEstados.value),
-          );
+      context.read<MyPublicationsBloc>().add(LoadMyPublicationStatus(estado: _valueCambiosEstados.value),);
     });
   }
 
@@ -54,10 +50,7 @@ int selectedIndex = 0;
           children: const [
             Icon(Icons.mark_chat_read),
             SizedBox(width: 10),
-            Text(
-              'Publicaciones',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            Text('Publicaciones',style: TextStyle(fontWeight: FontWeight.bold),),
           ],
         ),
         centerTitle: true,
@@ -95,9 +88,9 @@ int selectedIndex = 0;
                         spacing: 15,
                         alignment: WrapAlignment.start,
                         children: List.generate(
-                          state.publicaciones.length, // 👈 usar la cantidad real
+                          state.publicaciones.length, 
                           (i) {
-                            final pub = state.publicaciones[i]; // 👈 acceder al item correcto
+                            final pub = state.publicaciones[i]; 
                             return SizedBox(
                               width: 180,
                               child: InkWell(
@@ -134,14 +127,9 @@ int selectedIndex = 0;
                                               borderRadius: const BorderRadius.vertical(
                                                 top: Radius.circular(15),
                                               ),
-                                              child: Image.network(
-                                                pub.imagenUrl!,
-                                                fit: BoxFit.cover,
+                                              child: Image.network(pub.imagenUrl!, fit: BoxFit.cover,
                                                 errorBuilder: (context, error, stackTrace) {
-                                                  return const Icon(
-                                                    Icons.error,
-                                                    color: Colors.red,
-                                                  );
+                                                  return const Icon(Icons.error,color: Colors.red,);
                                                 },
                                               ),
                                             ),
@@ -183,14 +171,8 @@ int selectedIndex = 0;
                                           ),
                                         ],
                                       ),
-                                      const Positioned(
-                                        top: 10,
-                                        right: 10,
-                                        child: Icon(
-                                          Icons.favorite_rounded,
-                                          color: Colors.red,
-                                          size: 30,
-                                        ),
+                                      const Positioned(top: 10, right: 10,
+                                        child: Icon(Icons.favorite_rounded,color: Colors.red,size: 30,),
                                       ),
                                     ],
                                   ),
@@ -204,7 +186,6 @@ int selectedIndex = 0;
                   );
                 },
               ),
-
             ),
           ],
         ),
@@ -212,11 +193,7 @@ int selectedIndex = 0;
     );
   }
 
-  Widget _cambiosEstado(
-    BuildContext context,
-    List<Map<String, String>> data,
-    ValueNotifier<String> controlador,
-  ) {
+  Widget _cambiosEstado(BuildContext context, List<Map<String, String>> data,ValueNotifier<String> controlador,) {
     return Container(
       height: 30,
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -253,11 +230,7 @@ int selectedIndex = 0;
               items: List.generate(data.length, (i) {
                 return DropdownMenuItem<String>(
                   value: data[i]['id'],
-                  child: Text(removeHtmlTags(data[i]['nombre']!),
-                    style: const TextStyle(
-                      color: Colors.indigo,
-                    ),
-                  ),
+                  child: Text(removeHtmlTags(data[i]['nombre']!),style: const TextStyle(color: Colors.indigo,),),
                 );
               }),
             );

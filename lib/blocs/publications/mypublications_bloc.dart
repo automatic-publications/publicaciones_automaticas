@@ -101,43 +101,43 @@ class MyPublicationsBloc extends Bloc<MyPublicationsEvent, MyPublicationsState> 
   }
 
 
-Future<void> _onLoadMyPublicationStatus(LoadMyPublicationStatus event, Emitter<MyPublicationsState> emit) async {
-    try {
-      emit(state.copyWith(isLoading: true));
+  Future<void> _onLoadMyPublicationStatus(LoadMyPublicationStatus event, Emitter<MyPublicationsState> emit) async {
+      try {
+        emit(state.copyWith(isLoading: true));
 
-      // Llamada al servicio
-      Map struct = {
-        'url': _urlApiTest,
-        'endpoint': '/api/publicaciones/estado?estado=${event.estado}',
-        'method': 'GET',
-        'extraHeaders': {
-          'Content-Type': 'application/json',
+        // Llamada al servicio
+        Map struct = {
+          'url': _urlApiTest,
+          'endpoint': '/api/publicaciones/estado?estado=${event.estado}',
+          'method': 'GET',
+          'extraHeaders': {
+            'Content-Type': 'application/json',
+          }
+        };
+
+        Map response = await GetServices().services((struct));
+
+        if (response['status'] == 200) {
+          List publicacionesList = response['data'] as List;
+          final publicaciones = publicacionesList
+              .map((e) => MyPublicationsModel.fromMap(e))
+              .toList();
+
+          emit(state.copyWith(
+            publicaciones: publicaciones,
+            isLoading: false,
+          ));
+        } else {
+          emit(state.copyWith(
+            isLoading: false,
+            error: response['error'],
+          ));
         }
-      };
-
-      Map response = await GetServices().services((struct));
-
-      if (response['status'] == 200) {
-        List publicacionesList = response['data'] as List;
-        final publicaciones = publicacionesList
-            .map((e) => MyPublicationsModel.fromMap(e))
-            .toList();
-
-        emit(state.copyWith(
-          publicaciones: publicaciones,
-          isLoading: false,
-        ));
-      } else {
+      } catch (e) {
         emit(state.copyWith(
           isLoading: false,
-          error: response['error'],
+          error: e.toString(),
         ));
       }
-    } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
     }
-  }
 }
