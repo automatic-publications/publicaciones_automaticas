@@ -22,7 +22,7 @@ class GuiApp extends StatelessWidget {
       ],
       child: 
       MaterialApp(
-        title: "WorksIA",
+        title: "Estado Publicaciones",
         initialRoute: Routes().login,
         routes: Routes().generatedRoutes(),
         debugShowCheckedModeBanner: false,
