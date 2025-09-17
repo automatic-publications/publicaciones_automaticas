@@ -108,7 +108,7 @@ class MyPublicationsBloc extends Bloc<MyPublicationsEvent, MyPublicationsState> 
         // Llamada al servicio
         Map struct = {
           'url': _urlApiTest,
-          'endpoint': '/api/publicaciones/estado?estado=${event.estado}',
+          'endpoint': '/api/publicaciones/usuario/3/estado?estado=${event.estado}',
           'method': 'GET',
           'extraHeaders': {
             'Content-Type': 'application/json',

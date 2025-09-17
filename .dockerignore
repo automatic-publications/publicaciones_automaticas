@@ -1,0 +1,7 @@
+build
+.dart_tool
+.git
+.gitignore
+.idea
+android/.gradle
+pubspec.lock

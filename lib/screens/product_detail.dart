@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:publicaciones_automaticas/blocs/publications/mypublications_bloc.dart';
 import 'package:publicaciones_automaticas/screens/utils/utils.dart';
+import 'package:publicaciones_automaticas/widgets/mediaWidget.dart';
 
 class ProductDetail extends StatefulWidget {
   final Map<String, dynamic> productData;
@@ -17,20 +18,25 @@ class _ProductDetailState extends State<ProductDetail> {
   
   
   List<Map<String, String>> cambiosEstado = [
-    {"id": "seleccionar", "nombre": "SELECCIONAR"},
-    {"id": "aprobado", "nombre": "APROBADO"},
-    {"id": "desaprobado", "nombre": "DESAPROBADO"}
-  ];
+  {"id": "SELECCIONAR", "nombre": "SELECCIONAR"},
+  {"id": "APROBADO", "nombre": "APROBADO"},
+  {"id": "PENDIENTE", "nombre": "PENDIENTE"},
+  {"id": "DESAPROBADO", "nombre": "DESAPROBADO"},
+];
+
 
   late final ValueNotifier<String> _valueCambiosEstados;
 
   @override
   void initState() {
     super.initState();
-    final est = widget.productData['estado']?.toString().toLowerCase();
-    _valueCambiosEstados = ValueNotifier<String>(
-      (est == 'aprobado' || est == 'desaprobado') ? est! : 'seleccionar',
-    );
+    final est = widget.productData['estado']?.toString().toUpperCase();
+_valueCambiosEstados = ValueNotifier<String>(
+  (est == 'APROBADO' || est == 'DESAPROBADO' || est == 'PENDIENTE')
+      ? est!
+      : 'SELECCIONAR',
+);
+
   }
 
   @override
@@ -54,11 +60,15 @@ class _ProductDetailState extends State<ProductDetail> {
                   margin: const EdgeInsets.all(5),
                   width: double.infinity,
                   height: 400,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: NetworkImage(widget.productData['image']),fit: BoxFit.cover,),
+                  child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
+                    child: MediaViewer(
+                      imageUrl: widget.productData['image'],
+                      videoUrl: widget.productData['videoUrl'], // 👈 asegúrate que lo pasas desde HomeScreen
+                    ),
                   ),
                 ),
+
                 Positioned(
                   top: 40,
                   left: 20,
@@ -185,16 +195,25 @@ class _ProductDetailState extends State<ProductDetail> {
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   controlador.value = newValue;
+
                   context.read<MyPublicationsBloc>().add(
-                        ChangeStatusPublications(
-                          id: idPublicacion,
-                          estado: newValue,
-                        ),
-                      );
+                    ChangeStatusPublications(
+                      id: idPublicacion,
+                      estado: newValue,
+                    ),
+                  );
+
                   util.message(context, 'Actualizado con éxito', Colors.green);
+
+                  // 👉 si selecciona "DESAPROBADO", regresamos "PENDIENTE"
+                  final result = newValue == "DESAPROBADO" ? "PENDIENTE" : newValue;
+
+                  context.read<MyPublicationsBloc>().add(
+                    LoadMyPublicationStatus(estado: result),
+                  );
+
+                  Navigator.pop(context, result);
                 }
-                Navigator.pop(context);
-                context.read<MyPublicationsBloc>().add(LoadMyPublicationStatus(estado: controlador.value,),);
               },
               items: List.generate(data.length, (i) {
                 return DropdownMenuItem<String>(
