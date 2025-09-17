@@ -10,12 +10,14 @@ class MyPublicationsModel {
   final int id;
   final String descripcion;
   final String? imagenUrl;
+  final String? videoUrl;
   final String estado;
 
   MyPublicationsModel({
     required this.id,
     required this.descripcion,
     this.imagenUrl,
+    this.videoUrl,
     required this.estado,
   });
 
@@ -28,6 +30,7 @@ class MyPublicationsModel {
         id: json["id"],
         descripcion: json["descripcion"] ?? "",
         imagenUrl: json["imagenUrl"], 
+        videoUrl: json["videoUrl"], 
         estado: json["estado"],
       );
 
@@ -35,6 +38,7 @@ class MyPublicationsModel {
         "id": id,
         "descripcion": descripcion,
         "imagenUrl": imagenUrl,
+        "videoUrl": videoUrl,
         "estado": estado,
       };
 }

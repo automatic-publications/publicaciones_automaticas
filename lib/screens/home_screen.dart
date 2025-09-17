@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:publicaciones_automaticas/blocs/publications/mypublications_bloc.dart';
 import 'package:publicaciones_automaticas/screens/product_detail.dart';
+import 'package:publicaciones_automaticas/widgets/mediaWidget.dart';
 import 'package:publicaciones_automaticas/widgets/text/text_rich.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -94,21 +95,25 @@ int selectedIndex = 0;
                             return SizedBox(
                               width: 180,
                               child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
+                                onTap: () async {
+                                  final result = await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ProductDetail(
-                                        productData: {
-                                          "image": "${pub.imagenUrl}",
-                                          "id": pub.id,
-                                          "title": "${removeHtmlTags(pub.descripcion)}",
-                                          "estado": "${pub.estado}",
-                                          "description": "${removeHtmlTags(pub.descripcion)}",
-                                        },
-                                      ),
+                                          productData: {
+                                            "image": "${pub.imagenUrl}",
+                                            "videoUrl": "${pub.videoUrl}", // 👈 nuevo
+                                            "id": pub.id,
+                                            "title": "${removeHtmlTags(pub.descripcion)}",
+                                            "estado": "${pub.estado}",
+                                            "description": "${removeHtmlTags(pub.descripcion)}",
+                                          },
+                                        ),
                                     ),
                                   );
+                                  if (result != null) {
+                                      _valueCambiosEstados.value = result; // 👈 esto hace que dispare el addListener
+                                    }
                                 },
                                 child: Card(
                                   elevation: 5,
@@ -127,11 +132,10 @@ int selectedIndex = 0;
                                               borderRadius: const BorderRadius.vertical(
                                                 top: Radius.circular(15),
                                               ),
-                                              child: Image.network(pub.imagenUrl!, fit: BoxFit.cover,
-                                                errorBuilder: (context, error, stackTrace) {
-                                                  return const Icon(Icons.error,color: Colors.red,);
-                                                },
-                                              ),
+                                              child: MediaViewer(
+                                                      imageUrl: pub.imagenUrl,
+                                                      videoUrl: pub.videoUrl,
+                                                    ),
                                             ),
                                           ),
                                           Padding(
