@@ -5,13 +5,15 @@ services:
     build: .
     container_name: flutter-dev
     volumes:
-      - .:/app
+      - .:/app                # Monta tu código para poder editarlo desde el host
       - flutter_pub_cache:/root/.pub-cache
     working_dir: /app
     stdin_open: true
     tty: true
     ports:
-      - "8080:8080"
+      - "8080:8080"           # Solo si usas Flutter Web
+    environment:
+      PUB_CACHE: /root/.pub-cache
 
 volumes:
   flutter_pub_cache:

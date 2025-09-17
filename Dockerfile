@@ -15,6 +15,10 @@ COPY . .
 
 # Aseguramos que flutter esté en el PATH
 ENV PATH="/flutter/bin:${PATH}"
+# Copiamos el resto del proyecto
+
+# Exponemos el puerto si vas a usar flutter web
+EXPOSE 8080
 
 # Entramos en bash por defecto
 CMD ["/bin/bash"]
